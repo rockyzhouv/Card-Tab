@@ -108,7 +108,7 @@ const HTML_CONTENT = `
         color: #e3e3e3;
     }
 
-    /* 一言模块样式 */
+    /* 建议模块样式 */
     #hitokoto {
         margin: 5px 0 15px;
         font-size: 14px;
@@ -1195,7 +1195,7 @@ const HTML_CONTENT = `
             box-shadow: none; /* 移除阴影 */
         }
 
-        /* 移动端一言样式调整 - 紧凑显示 */
+        /* 移动端建议样式调整 - 紧凑显示 */
         #hitokoto {
             margin: 3px 0 6px 0; /* 紧凑的上下边距 */
             font-size: 12px; /* 减小字体 */
@@ -1794,11 +1794,33 @@ const HTML_CONTENT = `
     <div class="fixed-elements">
         <h3>我的导航</h3>
         <div class="center-content">
-            <!-- 一言模块 -->
+            <!-- 建议模块 -->
             <p id="hitokoto">
                 <a href="#" id="hitokoto_text"></a>
             </p>
-            <script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script>
+            <script>
+                // 名言API调用 - 使用Advice Slip API获取英文建议
+                fetch('https://api.adviceslip.com/advice')
+                    .then(response => response.json())
+                    .then(data => {
+                        const hitokotoText = document.getElementById('hitokoto_text');
+                        
+                        // 显示建议内容
+                        hitokotoText.textContent = data.slip.advice;
+                        
+                        // 设置链接（可选，链接到Advice Slip官网）
+                        hitokotoText.href = 'https://api.adviceslip.com/';
+                        hitokotoText.target = '_blank';
+                        
+                        // 添加ID信息到title属性
+                        hitokotoText.title = '建议 #' + data.slip.id;
+                    })
+                    .catch(error => {
+                        console.error('获取建议失败:', error);
+                        // 如果API调用失败，显示默认内容
+                        document.getElementById('hitokoto_text').textContent = '建议加载中...';
+                    });
+            </script>
             <!-- 搜索栏 -->
             <div class="search-container">
                 <div class="search-bar">
@@ -1809,7 +1831,12 @@ const HTML_CONTENT = `
                         <option value="duckduckgo">DuckDuckGo</option>
                     </select>
                     <input type="text" id="search-input" placeholder="">
-                    <button id="search-button">🔍</button>
+                    <button id="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div id="category-buttons-container" class="category-buttons-container"></div>

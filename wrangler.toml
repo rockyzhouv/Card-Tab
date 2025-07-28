@@ -1,0 +1,10 @@
+name = "index"
+main = "workers.js"
+compatibility_date = "2024-01-15"
+
+# 部署配置
+[env.production]
+name = "card-tab"
+
+[env.staging]
+name = "card-tab-staging" 
